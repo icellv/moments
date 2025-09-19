@@ -67,7 +67,12 @@ func (f FileHandler) Upload(c echo.Context) error {
 		defer src.Close()
 
 		// 创建原始图片
-		img_filename := strings.ReplaceAll(uuid.NewString(), "-", "")
+		ext := strings.ToLower(path.Ext(file.Filename))
+		uuidStr := strings.ReplaceAll(uuid.NewString(), "-", "")
+		img_filename := uuidStr
+		if ext == ".mov" {
+			img_filename = uuidStr + ext 
+		}
 		img_filepath := path.Join(f.base.cfg.UploadDir, img_filename)
 		dst, err := os.Create(img_filepath)
 		if err != nil {
