@@ -15,7 +15,7 @@ WORKDIR /app
 RUN apk add --no-cache build-base tzdata
 COPY backend/go.mod .
 COPY backend/go.sum .
-RUN go mod download
+RUN go env -w GO111MODULE=on && go env -w GOPROXY=https://goproxy.io && go mod download
 COPY backend/. .
 COPY --from=front /app/.output/public /app/public
 RUN go build -tags prod -ldflags="-s -w -X main.version=${VERSION} -X main.commitId=${COMMIT_ID}" -o /app/moments
